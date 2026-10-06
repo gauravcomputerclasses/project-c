@@ -55,9 +55,117 @@ void displayStudents(int roll[], int marks[][3], int n)
     for (int i = 0; i < n; i++)
     {
         int total = calculateTotal(marks[i], 3);
-        printf("\n%-10d %-10d %-10d %-10d %-10d %-11.2ff \n",
+        printf("\n%-10d %-10d %-10d %-10d %-10d %-11.2f \n",
                roll[i], marks[i][0], marks[i][1], marks[i][2], total, calculatePercentage(total));
     }
+}
+
+// Check Pass / Fail
+// True, False
+// False - 0
+// True - 1
+
+int checkPassFail(int marks[], int subject)
+{
+    for (int i = 0; i < subject; i++)
+    {
+        if (marks[i] < 33)
+        {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+void displayResult(int roll[], int marks[][3], int n)
+{
+    printf("\n--------------------- STUDENT RESULT -------------------");
+
+    for (int i = 0; i < n; i++)
+    {
+        // individual totalof each student
+        int total = calculateTotal(marks[i], 3);
+
+        printf("\n Roll Number %d\n", roll[i]);
+        printf("Total Marks %d / 300 \n", total);
+        printf("Percentage : %.2f%%\n", calculatePercentage(total));
+
+        if (checkPassFail(marks[i], 3))
+        {
+            printf("RESULT : Pass\n");
+        }
+        else
+        {
+            printf("RESULT : FAIL\n");
+        }
+    }
+}
+
+void searchStudent(int roll[], int marks[][3], int n)
+{
+    int searchRoll;
+    int found = 0;
+
+    printf("\nEnter Roll Number To Search: ");
+    scanf("%d", &searchRoll);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (roll[i] == searchRoll)
+        {
+            int total = calculateTotal(marks[i], 3);
+
+            printf("\n Roll Number %d\n", roll[i]);
+            printf("English : %d\n", marks[i][0]);
+            printf("Maths : %d\n", marks[i][1]);
+            printf("Computer : %d\n", marks[i][2]);
+            printf("Total Marks %d / 300 \n", total);
+            printf("Percentage : %.2f%%\n", calculatePercentage(total));
+
+            if (checkPassFail(marks[i], 3))
+            {
+                printf("RESULT : Pass\n");
+            }
+            else
+            {
+                printf("RESULT : FAIL\n");
+            }
+
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        printf("\nSTUDENT NOT FOUND");
+    }
+}
+
+void findTopper(int roll[], int marks[][3], int n)
+{
+    int highTotal = calculateTotal(marks[0], 3);
+    int topperIndex = 0;
+
+    for (int i = 1; i < n; i++)
+    {
+        int total = calculateTotal(marks[i], 3);
+
+        if (total > highTotal)
+        {
+            highTotal = total;
+            topperIndex = i;
+        }
+    }
+
+    printf("\n============CLASS TOPPER===============\n");
+    printf("\n Roll Number %d\n", roll[topperIndex]);
+    printf("English : %d\n", marks[topperIndex][0]);
+    printf("Maths : %d\n", marks[topperIndex][1]);
+    printf("Computer : %d\n", marks[topperIndex][2]);
+    printf("Total Marks %d / 300 \n", highTotal);
+    printf("Percentage : %.2f%%\n", calculatePercentage(highTotal));
 }
 
 int main()
@@ -104,15 +212,15 @@ int main()
         }
         else if (choice == 2)
         {
-            printf("Pass Fail");
+            displayResult(students, marks, n);
         }
         else if (choice == 3)
         {
-            printf("Search");
+            searchStudent(students, marks, n);
         }
         else if (choice == 4)
         {
-            printf("Class Topper");
+            findTopper(students, marks, n);
         }
         else if (choice == 5)
         {
